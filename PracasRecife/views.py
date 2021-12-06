@@ -145,7 +145,10 @@ class ResultadoBuscaPracaView(TemplateView):
                 for id in p:
                     for praca in pracas['records']:
                         if int(id) == praca[0]:
-                            lista_pracas.append([praca[0], praca[1], praca[-2], praca[-1]])
+                            if praca[1] != "":
+                                lista_pracas.append([praca[0], praca[1], praca[-2], praca[-1]])
+                            else:
+                                lista_pracas.append([praca[0], praca[3], praca[-2], praca[-1]])
 
                 if lista_pracas == [None]:
                     context['resposta'] = 'Não existe um menor caminho entre essas praças'
