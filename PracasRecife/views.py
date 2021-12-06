@@ -31,8 +31,8 @@ class ResultadoImportarBancoView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        if DistanciasPracas.objects.all().count() > 0:
-            DistanciasPracas.objects.all().delete()
+        #if DistanciasPracas.objects.all().count() > 0:
+        #    DistanciasPracas.objects.all().delete()
         ImportarBanco('PracasRecife/bd_pracas_recife.json')
         grafo = {}
         valor_vertice = 0
