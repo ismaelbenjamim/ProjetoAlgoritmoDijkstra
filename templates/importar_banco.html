@@ -57,12 +57,12 @@
 
 {% endblock %}
 {% block script %}
-/*setInterval(verificar_porcentagem, 1000);
+setInterval(verificar_porcentagem, 1000);
 function verificar_porcentagem() {
     var porcentagem = $.get("/porcentagem_banco_importado/", function(data) {
         document.getElementById("barra_porcentagem").innerHTML = data;
     });
-}*/
+}
 document.getElementById("carregando").style.display = 'none';
 function carregando() {
     document.getElementById("carregando").style.display = 'block';
