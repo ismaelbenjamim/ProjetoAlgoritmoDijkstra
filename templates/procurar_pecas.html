@@ -1,0 +1,77 @@
+{% extends 'base/base.html' %}
+{% load static %}
+{% block main %}
+    <div class="row">
+    <div class="col-12 col-lg-12">
+        <div class="card border-0 shadow">
+            <div class="card-header border-bottom d-flex align-items-center justify-content-between">
+                <h2 class="fs-5 fw-bold mb-0">Procurar praças</h2>
+            </div>
+            <div class="card-body">
+            {% if banco_importado %}
+                <div class="py-4">
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                        <div class="mb-3 mb-lg-0">
+                            <h1 class="h4">Busca de menor caminho entre praças</h1>
+                            <p class="mb-0">Insira a praça inicial e a praça de destino final.</p>
+                        </div>
+                    </div>
+                </div>
+                <form method="get">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-6 mb-4">
+                            <label class="my-1 me-2" for="praca_inicial">Praça de destino inicial</label>
+                            <select class="form-select" name="praca_inicial" id="praca_inicial"
+                                    aria-label="Default select example">
+                                <option value="0" selected>Selecione uma praça</option>
+                                {% for praca in lista_pracas %}
+                                    <option value="{{ praca.0 }}">{{ praca.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6 mb-4">
+                            <label class="my-1 me-2" for="praca_final">Praça de destino final</label>
+                            <select class="form-select" name="praca_final" id="praca_final"
+                                    aria-label="Default select example">
+                                <option value="0" selected>Selecione uma praça</option>
+                                {% for praca in lista_pracas %}
+                                    <option value="{{ praca.0 }}">{{ praca.1 }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start">
+                        <button type="button" onclick="carregando()" class="btn btn-primary">Realizar busca</button>
+                        <div id="carregando" class="spinner-border ms-3" role="status">
+                            <span class="visually-hidden">Buscando...</span>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <div id="resposta"></div>
+            {% else %}
+                <b>Banco ainda não importado</b>
+            {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    document.getElementById("carregando").style.display = 'none';
+    function carregando() {
+    document.getElementById("carregando").style.display = 'block';
+    const praca_inicial = document.getElementById("praca_inicial").value;
+    const praca_final = document.getElementById("praca_final").value;
+    if (praca_inicial == praca_final) {
+    document.getElementById("resposta").innerHTML = "<b>É necessário que a praça inicial e final sejam diferentes<b>";
+    document.getElementById("carregando").style.display = 'none';
+    } else {
+    var jqxhr = $.get("/resultado_busca_praca/?praca_inicial=" + praca_inicial + "&praca_final=" + praca_final,
+    function(data) {
+    document.getElementById("resposta").innerHTML = data;
+    document.getElementById("carregando").style.display = 'none';
+    });
+    }
+    }
+{% endblock %}
